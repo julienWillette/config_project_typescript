@@ -39,10 +39,25 @@ app.get("*", (req, res) => {
   res.send({ success: false, message: "Wrong adress" });
 });
 
-app.use((error:any, req:Request, res:Response, next:NextFunction) => {
-  if (error.name === "MongoError" && error.code === 11000) {
-    res.status(400);
-    res.json({ success: false, message: "The name is already used" });
+interface MongoError extends Error {
+  code: number;
+}
+
+function isMongoError(error: Error): error is MongoError {
+  return error.name === 'MongoError';
+}
+
+app.use((error: Error, req: Request, res: Response, _next: NextFunction) => {
+  if (isMongoError(error)) {
+    switch (error.code) {
+      case 11000:
+        res.status(400);
+        res.json({ success: false, message: 'The name is already used' });
+        break;
+      default:
+        res.status(400);
+        res.json({ success: false, message: 'An error occured' });
+    }
   }
 });
 

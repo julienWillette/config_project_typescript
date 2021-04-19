@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 
 const WilderModel = require("../models/Wilder");
 
@@ -14,11 +14,11 @@ module.exports = {
     res.json({ success: true, result });
   },
   update: async (req:Request, res:Response) => {
-    const result = await WilderModel.updateOne({ _id: req.body._id }, req.body);
+    const result = await WilderModel.updateOne({ _id:req.body._id }, req.body);
     res.json(result);
   },
   delete: async (req:Request, res:Response) => {
-    const result = await WilderModel.deleteOne({ _id: req.body._id });
+    const result = await WilderModel.deleteOne({ _id:req.body._id });
     res.json({ success: true, result });
   },
 };
